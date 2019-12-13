@@ -1,0 +1,7 @@
+<?php
+
+Route::get('/users/all', 'UsersController@index')->name('users.all');
+Route::get('/products/all', 'ProductController@index')->name('products.all');
+
+Route::get('orders', 'OrderController@index')->name('orders.all');
+Route::post('orders', 'OrderController@store')->name('orders');
