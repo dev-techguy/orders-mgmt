@@ -3,14 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Traits\Timestamp;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index(Order $order)
+    use Timestamp;
+
+    public function index(Order $order, Request $request)
     {
-        $orders = $order->with('user:id,name', 'product:id,name')
-            ->orderBy('id', 'DESC')->paginate('10');
+        $orders = $order->with('user:id,name', 'product:id,name');
+        $period = $request->get('period');
+
+        if ($period && $period !== 'all') {
+            [$from, $to] = $this->getTimestamps($request);
+            $orders = $orders->whereBetween('created_at', [$from, $to]);
+        }
+
+        $orders = $orders->orderBy('created_at', 'DESC')->paginate('10');
         return $this->successJson($orders);
     }
 

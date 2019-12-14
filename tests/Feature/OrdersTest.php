@@ -120,6 +120,34 @@ class OrdersTest extends TestCase
         $this->assertEquals($quantity, $order->fresh()->quantity);
     }
 
+    /** 
+     * @test
+     * @dataProvider periods
+     */
+    function orders_may_be_filtered_by_date_intervals($period, $ordersCount)
+    {
+        factory(Order::class, 3)->create();
+        factory(Order::class, 5)->create(['created_at' => now()->subDays(5)]);
+
+        $response = $this->getJson(route('orders', ['period' => $period]))->assertOk();
+        $response->assertJsonCount($ordersCount, 'data.data');
+    }
+
+    /** @test */
+    function orders_may_be_filtered_by_user_or_product_name()
+    {
+        factory(Order::class, 5)->create();
+        $product = factory(Product::class)->create();
+        $user = factory(User::class)->create();
+        factory(Order::class, 2)->create(['user_id' => $user->id, 'product_id' => $product->id]);
+
+        $response = $this->getJson(route('search', ['q' => $product->name]))->assertOk();
+        $response->assertJsonCount(2, 'data.data');
+
+        $response2 = $this->getJson(route('search', ['q' => $user->name]))->assertOk();
+        $response2->assertJsonCount(2, 'data.data');
+    }
+
     public function productDiscounts()
     {
         return [
@@ -135,6 +163,15 @@ class OrdersTest extends TestCase
         return [
             [2, 200],
             [5, 400]
+        ];
+    }
+
+    public function periods()
+    {
+        return [
+            ['all', 8],
+            ['week', 8],
+            ['today', 3],
         ];
     }
 

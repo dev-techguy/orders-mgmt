@@ -8,19 +8,19 @@
     </alert>
 
     <div class="panel mt-4 shadow">
-      <form action>
+      <form action @submit.prevent="searchOrder">
         <div class="w-full flex items-center">
           <div class="w-1/4">
             <label for>
-              <select name id class="form-select">
+              <select name id class="form-select" v-model="period">
                 <option value="all">All time</option>
-                <option value="7">Last 7 days</option>
+                <option value="week">Last 7 days</option>
                 <option value="today">Today</option>
               </select>
             </label>
           </div>
           <div class="w-1/2">
-            <input type="text" class="form-input w-full h-10" placeholder="enter search item" />
+            <input type="text" class="form-input w-full h-10" placeholder="enter search item" v-model="q" required/>
           </div>
           <div class="w-1/4 px-2 flex justify-end">
             <button
@@ -70,6 +70,8 @@ export default {
   data() {
     return {
       orders: [],
+      q: '',
+      period: 'all',
       busy: false,
       focus: {},
       showDeleteAlert: false
@@ -87,7 +89,7 @@ export default {
     fetchProducts() {
       this.busy = true;
       axios
-        .get("/orders")
+        .get(`/orders?period=${this.period}`)
         .then(res => {
           this.orders = res.data.data;
         })
@@ -117,6 +119,19 @@ export default {
       }).catch(err => {
         console.error(err);
       });
+    },
+    searchOrder() {
+      this.busy = true;
+      axios.get(`/search?q=${this.q}`).then(res => {
+        this.orders = res.data.data;
+      }).catch(err => {
+          console.log(err);
+        }).finally(() => (this.busy = false));
+    }
+  },
+  watch: {
+    period() {
+      return this.fetchProducts();
     }
   }
 };

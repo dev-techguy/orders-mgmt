@@ -2141,6 +2141,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       orders: [],
+      q: '',
+      period: 'all',
       busy: false,
       focus: {},
       showDeleteAlert: false
@@ -2161,7 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.busy = true;
-      axios.get("/orders").then(function (res) {
+      axios.get("/orders?period=".concat(this.period)).then(function (res) {
         _this2.orders = res.data.data;
       })["catch"](function (err) {
         console.log(err);
@@ -2194,6 +2196,23 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         console.error(err);
       });
+    },
+    searchOrder: function searchOrder() {
+      var _this5 = this;
+
+      this.busy = true;
+      axios.get("/search?q=".concat(this.q)).then(function (res) {
+        _this5.orders = res.data.data;
+      })["catch"](function (err) {
+        console.log(err);
+      })["finally"](function () {
+        return _this5.busy = false;
+      });
+    }
+  },
+  watch: {
+    period: function period() {
+      return this.fetchProducts();
     }
   }
 });
@@ -4549,7 +4568,101 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm._m(0),
+      _c("div", { staticClass: "panel mt-4 shadow" }, [
+        _c(
+          "form",
+          {
+            attrs: { action: "" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.searchOrder($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "w-full flex items-center" }, [
+              _c("div", { staticClass: "w-1/4" }, [
+                _c("label", { attrs: { for: "" } }, [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.period,
+                          expression: "period"
+                        }
+                      ],
+                      staticClass: "form-select",
+                      attrs: { name: "", id: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.period = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { value: "all" } }, [
+                        _vm._v("All time")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "week" } }, [
+                        _vm._v("Last 7 days")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "today" } }, [
+                        _vm._v("Today")
+                      ])
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "w-1/2" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.q,
+                      expression: "q"
+                    }
+                  ],
+                  staticClass: "form-input w-full h-10",
+                  attrs: {
+                    type: "text",
+                    placeholder: "enter search item",
+                    required: ""
+                  },
+                  domProps: { value: _vm.q },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.q = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -4613,48 +4726,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel mt-4 shadow" }, [
-      _c("form", { attrs: { action: "" } }, [
-        _c("div", { staticClass: "w-full flex items-center" }, [
-          _c("div", { staticClass: "w-1/4" }, [
-            _c("label", { attrs: { for: "" } }, [
-              _c(
-                "select",
-                { staticClass: "form-select", attrs: { name: "", id: "" } },
-                [
-                  _c("option", { attrs: { value: "all" } }, [
-                    _vm._v("All time")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "7" } }, [
-                    _vm._v("Last 7 days")
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { value: "today" } }, [_vm._v("Today")])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-1/2" }, [
-            _c("input", {
-              staticClass: "form-input w-full h-10",
-              attrs: { type: "text", placeholder: "enter search item" }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-1/4 px-2 flex justify-end" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded"
-              },
-              [_vm._v("search")]
-            )
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "w-1/4 px-2 flex justify-end" }, [
+      _c(
+        "button",
+        {
+          staticClass:
+            "bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded"
+        },
+        [_vm._v("search")]
+      )
     ])
   }
 ]
