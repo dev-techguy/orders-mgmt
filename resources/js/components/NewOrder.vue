@@ -42,7 +42,9 @@
       </div>
       <div class="w-full mt-2 flex">
         <div class="w-1/2 flex justify-end">
-          <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded" :disabled="btnLoading">add</button>
+          <button class="app-btn bg-gray-600 hover:bg-gray-700" :disabled="btnLoading">
+              add<span v-show="btnLoading">ing...</span>
+            </button>
         </div>
       </div>
     </form>
@@ -87,7 +89,6 @@ export default {
       axios
         .post("/orders", this.order)
         .then(res => {
-          alert("Order Made Successfully!");
           this.order = {};
           eventBus.$emit('orderCreated');
         })

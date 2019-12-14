@@ -93,6 +93,17 @@ class OrdersTest extends TestCase
         $response->assertJsonCount(5, 'data.data');
     }
 
+    /** @test */
+    function an_order_may_be_deleted()
+    {
+        [$order1, $order2] = factory(Order::class, 2)->create();
+        $this->assertDatabaseHas('orders', ['id' => $order1->id]);
+        $this->deleteJson(route('orders.delete', $order1->id))->assertOk();
+        $this->assertDatabaseMissing('orders', ['id' => $order1->id]);
+        $this->assertEquals(1, Order::count());
+        $this->assertDatabaseHas('orders', ['id' => $order2->id]);
+    }
+
     public function productDiscounts()
     {
         return [

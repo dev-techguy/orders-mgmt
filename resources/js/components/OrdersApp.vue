@@ -1,15 +1,15 @@
 <template>
   <div>
       <new-order></new-order>
-      <products></products>
+      <orders></orders>
   </div>
 </template>
 
 <script>
 import NewOrder from './NewOrder';
-import Products from './Products';
+import Orders from './Orders';
 export default {
-    components: {NewOrder, Products}
+    components: {NewOrder, Orders}
 }
 </script>
 

@@ -8,10 +8,10 @@
     <td>{{ order.created_at }}</td>
     <td>
       <span class="text-green-500">
-        <a href="#">Edit</a>
+        <a class="cursor-pointer">Edit</a>
       </span> |
       <span class="text-red-500">
-        <a href="#">Delete</a>
+        <a class="cursor-pointer" @click="$emit('deleteItem', order)">Delete</a>
       </span>
     </td>
   </tr>
@@ -27,7 +27,7 @@ export default {
     total() {
       return `${this.order.total} ${this.order.currency}`;
     }
-  }
+  },
 };
 </script>
 

@@ -26,4 +26,10 @@ class OrderController extends Controller
         $createdOrder = $order->make($payload);
         return $this->successJson($createdOrder);
     }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+        return $this->successJson();
+    }
 }
