@@ -13,8 +13,9 @@ class Product extends Model
         return null !== $this->discount;
     }
 
-    public function issueDiscount($value, $units = 3)
+    public function issueDiscount($value, $units = null)
     {
+        $units = $units ?? config('product.discount.units');
         return $this->update(['discount' => $value, 'discount_units' => $units]);
     }
 

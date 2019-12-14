@@ -1,5 +1,7 @@
 <?php
 
+Route::get('/', 'HomeController@index');
+
 Route::get('/users/all', 'UsersController@index')->name('users.all');
 Route::get('/products/all', 'ProductController@index')->name('products.all');
 

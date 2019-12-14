@@ -14,11 +14,10 @@ class Order extends Model
 
         $request['price'] = $product->price;
         $request['currency'] = $product->currency;
-        $request['total'] =
-            $this->computeTotal(
-                $product,
-                $request['quantity']
-            );
+        $request['total'] = $this->computeTotal(
+            $product,
+            $request['quantity']
+        );
 
         return $this->create($request);
     }
