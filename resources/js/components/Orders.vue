@@ -51,6 +51,7 @@
               :key="index"
               :order="order"
               @deleteItem="triggerDelete"
+              @updateItem="updateItem"
             ></order-list-item>
           </tbody>
         </table>
@@ -109,6 +110,13 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+    updateItem(order) {
+      axios.patch(`/orders/${order.id}/update`, {quantity: order.quantity}).then(res => {
+        this.fetchProducts();
+      }).catch(err => {
+        console.error(err);
+      });
     }
   }
 };

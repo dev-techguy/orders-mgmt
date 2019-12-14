@@ -33,6 +33,18 @@ class Order extends Model
         return $this->create($request);
     }
 
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::parse($date)->format('d M Y, g:i A');
+    }
+
+    public function updateRecord($quantity)
+    {
+        $total = $this->computeTotal($this->product, $quantity);
+
+        return $this->update(['quantity' => $quantity, 'total' => $total]);
+    }
+
     private function computeTotal(Product $product, $quantity)
     {
         $total = $product->price * $quantity;
@@ -42,10 +54,5 @@ class Order extends Model
             $total -= $discounted;
         }
         return $total;
-    }
-
-    public function getCreatedAtAttribute($date)
-    {
-        return Carbon::parse($date)->format('d M Y, g:i A');
     }
 }

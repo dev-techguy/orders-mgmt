@@ -27,6 +27,13 @@ class OrderController extends Controller
         return $this->successJson($createdOrder);
     }
 
+    public function update(Order $order, Request $request)
+    {
+        $order->updateRecord($request->get('quantity'));
+
+        return $this->successJson();
+    }
+
     public function destroy(Order $order)
     {
         $order->delete();

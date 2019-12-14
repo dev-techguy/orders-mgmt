@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Order;
 use App\Product;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -104,6 +105,21 @@ class OrdersTest extends TestCase
         $this->assertDatabaseHas('orders', ['id' => $order2->id]);
     }
 
+    /** 
+     * @test
+     * @dataProvider quantities
+     */
+    function an_order_may_be_updated($quantity, $total)
+    {
+        $order = $this->orderProductWithDiscount(3);
+        $this->assertEquals(240, $order->fresh()->total);
+        $request = ['quantity' => $quantity, 'order_id' => $order->id];
+
+        $this->patchJson(route('orders.update', $order->id), $request)->assertOk();
+        $this->assertEquals($total, $order->fresh()->total);
+        $this->assertEquals($quantity, $order->fresh()->quantity);
+    }
+
     public function productDiscounts()
     {
         return [
@@ -112,5 +128,25 @@ class OrdersTest extends TestCase
             [100, 4, 20, 320],
             [100, 5, 20, 400],
         ];
+    }
+
+    public function quantities()
+    {
+        return [
+            [2, 200],
+            [5, 400]
+        ];
+    }
+
+    private function orderProductWithDiscount($quantity, $productPrice = 100)
+    {
+        $product = factory(Product::class)->create(['price' => $productPrice]);
+        $product->issueDiscount(20);
+        $user = factory(User::class)->create();
+        return (new Order())->make([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'quantity' => $quantity
+        ]);
     }
 }

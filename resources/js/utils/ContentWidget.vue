@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div v-if="data.length > 0"><slot></slot></div>
+      <div v-if="data && data.length > 0"><slot></slot></div>
       <h4 v-else v-html="placeholder" class="text-center text-red-600"></h4>
   </div>
 </template>

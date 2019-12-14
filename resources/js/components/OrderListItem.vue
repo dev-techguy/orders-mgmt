@@ -3,15 +3,26 @@
     <td>{{ order.user.name }}</td>
     <td>{{ order.product.name }}</td>
     <td>{{ price }}</td>
-    <td>{{ order.quantity }}</td>
+    <td @dblclick="editMode = true">
+      <span v-if="!editMode">{{ order.quantity }}</span>
+      <input
+        type="number"
+        class="form-input w-16 h-6"
+        v-if="editMode"
+        v-model="order.quantity"
+        @keydown.esc="editMode = false"
+        autofocus
+      />
+    </td>
     <td>{{ total }}</td>
     <td>{{ order.created_at }}</td>
     <td>
-      <span class="text-green-500">
-        <a class="cursor-pointer">Edit</a>
-      </span> |
-      <span class="text-red-500">
-        <a class="cursor-pointer" @click="$emit('deleteItem', order)">Delete</a>
+      <span v-if="!editMode">
+          <a class="cursor-pointer text-green-500" @click="editMode = true">Edit</a> |
+          <a class="cursor-pointer text-red-500" @click="$emit('deleteItem', order)">Delete</a>
+      </span>
+      <span v-if="editMode">
+          <a class="cursor-pointer text-blue-500" @click="$emit('updateItem', order); editMode = false">Save</a>
       </span>
     </td>
   </tr>
@@ -19,6 +30,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      editMode: false
+    };
+  },
   props: ["order"],
   computed: {
     price() {
@@ -27,7 +43,7 @@ export default {
     total() {
       return `${this.order.total} ${this.order.currency}`;
     }
-  },
+  }
 };
 </script>
 

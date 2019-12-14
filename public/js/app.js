@@ -2023,7 +2023,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      editMode: false
+    };
+  },
   props: ["order"],
   computed: {
     price: function price() {
@@ -2050,6 +2066,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_Bus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/Bus */ "./resources/js/services/Bus.js");
 /* harmony import */ var _utils_Alert_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/Alert.vue */ "./resources/js/utils/Alert.vue");
 /* harmony import */ var _utils_ContentWidget_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/ContentWidget.vue */ "./resources/js/utils/ContentWidget.vue");
+//
 //
 //
 //
@@ -2163,6 +2180,17 @@ __webpack_require__.r(__webpack_exports__);
         var index = _this3.orders.data.indexOf(_this3.focus);
 
         _this3.orders.data.splice(index, 1);
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    },
+    updateItem: function updateItem(order) {
+      var _this4 = this;
+
+      axios.patch("/orders/".concat(order.id, "/update"), {
+        quantity: order.quantity
+      }).then(function (res) {
+        _this4.fetchProducts();
       })["catch"](function (err) {
         console.error(err);
       });
@@ -4366,42 +4394,114 @@ var render = function() {
     _vm._v(" "),
     _c("td", [_vm._v(_vm._s(_vm.price))]),
     _vm._v(" "),
-    _c("td", [_vm._v(_vm._s(_vm.order.quantity))]),
+    _c(
+      "td",
+      {
+        on: {
+          dblclick: function($event) {
+            _vm.editMode = true
+          }
+        }
+      },
+      [
+        !_vm.editMode
+          ? _c("span", [_vm._v(_vm._s(_vm.order.quantity))])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editMode
+          ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.order.quantity,
+                  expression: "order.quantity"
+                }
+              ],
+              staticClass: "form-input w-16 h-6",
+              attrs: { type: "number", autofocus: "" },
+              domProps: { value: _vm.order.quantity },
+              on: {
+                keydown: function($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "esc", 27, $event.key, [
+                      "Esc",
+                      "Escape"
+                    ])
+                  ) {
+                    return null
+                  }
+                  _vm.editMode = false
+                },
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.order, "quantity", $event.target.value)
+                }
+              }
+            })
+          : _vm._e()
+      ]
+    ),
     _vm._v(" "),
     _c("td", [_vm._v(_vm._s(_vm.total))]),
     _vm._v(" "),
     _c("td", [_vm._v(_vm._s(_vm.order.created_at))]),
     _vm._v(" "),
     _c("td", [
-      _vm._m(0),
-      _vm._v(" |\n    "),
-      _c("span", { staticClass: "text-red-500" }, [
-        _c(
-          "a",
-          {
-            staticClass: "cursor-pointer",
-            on: {
-              click: function($event) {
-                return _vm.$emit("deleteItem", _vm.order)
-              }
-            }
-          },
-          [_vm._v("Delete")]
-        )
-      ])
+      !_vm.editMode
+        ? _c("span", [
+            _c(
+              "a",
+              {
+                staticClass: "cursor-pointer text-green-500",
+                on: {
+                  click: function($event) {
+                    _vm.editMode = true
+                  }
+                }
+              },
+              [_vm._v("Edit")]
+            ),
+            _vm._v(" |\n        "),
+            _c(
+              "a",
+              {
+                staticClass: "cursor-pointer text-red-500",
+                on: {
+                  click: function($event) {
+                    return _vm.$emit("deleteItem", _vm.order)
+                  }
+                }
+              },
+              [_vm._v("Delete")]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.editMode
+        ? _c("span", [
+            _c(
+              "a",
+              {
+                staticClass: "cursor-pointer text-blue-500",
+                on: {
+                  click: function($event) {
+                    _vm.$emit("updateItem", _vm.order)
+                    _vm.editMode = false
+                  }
+                }
+              },
+              [_vm._v("Save")]
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "text-green-500" }, [
-      _c("a", { staticClass: "cursor-pointer" }, [_vm._v("Edit")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -4490,7 +4590,10 @@ var render = function() {
                     return _c("order-list-item", {
                       key: index,
                       attrs: { order: order },
-                      on: { deleteItem: _vm.triggerDelete }
+                      on: {
+                        deleteItem: _vm.triggerDelete,
+                        updateItem: _vm.updateItem
+                      }
                     })
                   }),
                   1
@@ -4687,7 +4790,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.data.length > 0
+    _vm.data && _vm.data.length > 0
       ? _c("div", [_vm._t("default")], 2)
       : _c("h4", {
           staticClass: "text-center text-red-600",
