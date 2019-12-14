@@ -1,1 +1,29 @@
-//
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+.panel {
+    @apply border border-gray-400 mt-8 rounded p-4 bg-white;
+}
+
+.app-table thead tr {
+    @apply text-left;
+}
+
+.app-table thead th {
+    @apply px-4 py-2;
+}
+
+.app-table tbody td {
+    @apply border px-4 py-2;
+}
+
+.app-table tbody tr:nth-child(even) {
+    @apply bg-gray-100;
+}
+
+.app-btn {
+    @apply  text-white font-bold py-1 px-4 rounded;
+}
+
+@import "tailwindcss/utilities";
