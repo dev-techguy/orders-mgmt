@@ -9,7 +9,8 @@ class OrderController extends Controller
 {
     public function index(Order $order)
     {
-        $orders = $order->paginate('10');
+        $orders = $order->with('user:id,name', 'product:id,name')
+            ->orderBy('id', 'DESC')->paginate('10');
         return $this->successJson($orders);
     }
 

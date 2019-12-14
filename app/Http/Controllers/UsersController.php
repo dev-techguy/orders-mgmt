@@ -9,7 +9,7 @@ class UsersController extends Controller
 {
     public function index(User $user)
     {
-        $users = $user->limit(10)->select('name')->get();
+        $users = $user->limit(10)->select(['id', 'name'])->get();
         return $this->successJson($users);
     }
 }

@@ -9,7 +9,7 @@ class ProductController extends Controller
     public function index(Product $product)
     {
         $products = $product->limit(5)
-            ->select(['name', 'price', 'currency', 'discount'])
+            ->select(['id', 'name', 'price', 'currency', 'discount'])
             ->get();
 
         return $this->successJson($products);
