@@ -20,7 +20,9 @@ class OrderController extends Controller
             $orders = $orders->whereBetween('created_at', [$from, $to]);
         }
 
-        $orders = $orders->orderBy('created_at', 'DESC')->paginate('5');
+        $orders = $orders->orderBy('created_at', 'DESC')
+            ->paginate(config('product.pagination'));
+
         return $this->successJson($orders);
     }
 

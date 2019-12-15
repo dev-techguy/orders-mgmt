@@ -7,7 +7,7 @@ class WeekTimestamp extends BaseTimestamp
     public function __construct()
     {
         parent::__construct(
-            now()->subDay(7)->toDateString(),
+            now()->subDays(7)->toDateString(),
             now()->toDateTimeString()
         );
     }

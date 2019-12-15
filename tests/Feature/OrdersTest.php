@@ -7,6 +7,7 @@ use App\Product;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Config;
 
 class OrdersTest extends TestCase
 {
@@ -79,7 +80,7 @@ class OrdersTest extends TestCase
         $this->assertDatabaseHas('orders', [
             'user_id' => $order['user_id'],
             'product_id' => $order['product_id'],
-            'quantity' => $quantity,
+            'quantity' => abs($quantity),
             'price' => $price,
             'currency' => 'EUR',
             'total' => $total
@@ -117,7 +118,7 @@ class OrdersTest extends TestCase
 
         $this->patchJson(route('orders.update', $order->id), $request)->assertOk();
         $this->assertEquals($total, $order->fresh()->total);
-        $this->assertEquals($quantity, $order->fresh()->quantity);
+        $this->assertEquals(abs($quantity), $order->fresh()->quantity);
     }
 
     /** 
@@ -128,6 +129,8 @@ class OrdersTest extends TestCase
     {
         factory(Order::class, 3)->create();
         factory(Order::class, 5)->create(['created_at' => now()->subDays(5)]);
+
+        Config::set('product.pagination', 10);
 
         $response = $this->getJson(route('orders', ['period' => $period]))->assertOk();
         $response->assertJsonCount($ordersCount, 'data.data');
@@ -155,6 +158,7 @@ class OrdersTest extends TestCase
             [100, 2, 20, 200],
             [100, 4, 20, 320],
             [100, 5, 20, 400],
+            [100, -1, 20, 100],
         ];
     }
 
@@ -162,7 +166,8 @@ class OrdersTest extends TestCase
     {
         return [
             [2, 200],
-            [5, 400]
+            [5, 400],
+            [-1, 100]
         ];
     }
 
