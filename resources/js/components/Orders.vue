@@ -40,7 +40,7 @@
     </div>
 
     <div class="panel overflow-x-auto">
-      <content-widget :data="orders.data" placeholder="There are no orders to display...">
+      <content-widget :data="orders.data" :loading="busy" placeholder="There are no orders to display...">
         <table class="app-table table-auto lg:w-full">
           <thead>
             <tr>
