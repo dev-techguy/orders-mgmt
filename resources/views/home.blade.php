@@ -10,6 +10,7 @@
 </head>
 <body class="bg-gray-200 h-screen">
     <div id="app" class="w-2/3 mx-auto">
+        <img src="https://adcash.com/wp-content/themes/adcash/assets/dist/img/logo-adcash.svg" alt="adcash logo" class="mt-6">
         <orders-app></orders-app>
     </div>
     <script src="js/app.js"></script>

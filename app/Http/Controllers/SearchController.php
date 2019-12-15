@@ -15,7 +15,7 @@ class SearchController extends Controller
             return $query->select('id')->from('products')->where('name', 'LIKE', "%$q%");
         })->orWhereIn('user_id', function ($query) use ($q) {
             return $query->select('id')->from('users')->where('name', 'LIKE', "%$q%");
-        })->with('user:id,name', 'product:id,name')->orderBy('created_at', 'DESC')->paginate(10);
+        })->with('user:id,name', 'product:id,name')->orderBy('created_at', 'DESC')->paginate(5);
 
         return $this->successJson($results);
     }

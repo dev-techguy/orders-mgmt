@@ -3,7 +3,9 @@
     <alert v-if="showDeleteAlert" @canProceed="deleteOrder" @alertClosed="showDeleteAlert = false">
       <h4>
         Are you sure you want to delete
-        <span class="bg-yellow-100 px-2 py-1">{{ focus.product.name }}</span> from the list of orders?
+        <span
+          class="bg-yellow-100 px-2 py-1"
+        >{{ focus.product.name }}</span> from the list of orders?
       </h4>
     </alert>
 
@@ -20,7 +22,13 @@
             </label>
           </div>
           <div class="w-1/2">
-            <input type="text" class="form-input w-full h-10" placeholder="enter search item" v-model="q" required/>
+            <input
+              type="text"
+              class="form-input w-full h-10"
+              placeholder="enter search item"
+              v-model="q"
+              required
+            />
           </div>
           <div class="w-1/4 px-2 flex justify-end">
             <button
@@ -56,6 +64,8 @@
           </tbody>
         </table>
       </content-widget>
+
+      <pagination :data="orders" @pagination-change-page="fetchProducts"></pagination>
     </div>
   </div>
 </template>
@@ -65,13 +75,15 @@ import OrderListItem from "./OrderListItem";
 import { eventBus } from "../services/Bus";
 import Alert from "../utils/Alert.vue";
 import ContentWidget from "../utils/ContentWidget.vue";
+import Pagination from "laravel-vue-pagination";
+
 export default {
-  components: { OrderListItem, Alert, ContentWidget },
+  components: { OrderListItem, Alert, ContentWidget, Pagination },
   data() {
     return {
-      orders: [],
-      q: '',
-      period: 'all',
+      orders: {},
+      q: "",
+      period: "all",
       busy: false,
       focus: {},
       showDeleteAlert: false
@@ -86,10 +98,10 @@ export default {
     this.fetchProducts();
   },
   methods: {
-    fetchProducts() {
+    fetchProducts(page = 1) {
       this.busy = true;
       axios
-        .get(`/orders?period=${this.period}`)
+        .get(`/orders?period=${this.period}&page=${page}`)
         .then(res => {
           this.orders = res.data.data;
         })
@@ -114,19 +126,26 @@ export default {
         });
     },
     updateItem(order) {
-      axios.patch(`/orders/${order.id}/update`, {quantity: order.quantity}).then(res => {
-        this.fetchProducts();
-      }).catch(err => {
-        console.error(err);
-      });
+      axios
+        .patch(`/orders/${order.id}/update`, { quantity: order.quantity })
+        .then(res => {
+          this.fetchProducts();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     searchOrder() {
       this.busy = true;
-      axios.get(`/search?q=${this.q}`).then(res => {
-        this.orders = res.data.data;
-      }).catch(err => {
+      axios
+        .get(`/search?q=${this.q}`)
+        .then(res => {
+          this.orders = res.data.data;
+        })
+        .catch(err => {
           console.log(err);
-        }).finally(() => (this.busy = false));
+        })
+        .finally(() => (this.busy = false));
     }
   },
   watch: {
@@ -138,4 +157,5 @@ export default {
 </script>
 
 <style>
+
 </style>
