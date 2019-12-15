@@ -926,6 +926,31 @@ video {
   border-radius: 0.25rem;
 }
 
+.pagination {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: end;
+          justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.pagination .page-link {
+  border-width: 1px;
+  background-color: #718096;
+  margin-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #4a5568;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

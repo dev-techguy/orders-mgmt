@@ -26,4 +26,16 @@
     @apply  text-white font-bold py-1 px-4 rounded;
 }
 
+.pagination {
+    @apply flex justify-end mt-2;
+}
+
+.pagination .page-link {
+    @apply border bg-gray-600 mr-2 py-1 px-2 rounded text-white text-sm;
+}
+
+.pagination .page-item.active .page-link {
+    @apply bg-gray-700;
+}
+
 @import "tailwindcss/utilities";
