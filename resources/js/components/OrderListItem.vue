@@ -11,6 +11,7 @@
         v-if="editMode"
         v-model="order.quantity"
         @keydown.esc="editMode = false"
+        min="1"
         autofocus
       />
     </td>

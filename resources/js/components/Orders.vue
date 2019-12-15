@@ -11,37 +11,37 @@
 
     <div class="panel mt-4 shadow">
       <form action @submit.prevent="searchOrder">
-        <div class="w-full flex items-center">
-          <div class="w-1/4">
+        <div class="w-full flex flex-col lg:flex-row">
+          <div class="lg:w-1/4 mb-4 lg:mb-0">
             <label for>
-              <select name id class="form-select" v-model="period">
+              <select name id class="form-select w-full lg:w-auto" v-model="period">
                 <option value="all">All time</option>
                 <option value="week">Last 7 days</option>
                 <option value="today">Today</option>
               </select>
             </label>
           </div>
-          <div class="w-1/2">
+          <div class="lg:w-1/2 mb-4 lg:mb-0">
             <input
               type="text"
-              class="form-input w-full h-10"
+              class="form-input w-full lg:h-10"
               placeholder="enter search item"
               v-model="q"
               required
             />
           </div>
-          <div class="w-1/4 px-2 flex justify-end">
+          <div class="lg:w-1/4 lg:px-2 lg:flex lg:justify-end lg:items-center">
             <button
-              class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded"
+              class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-1 px-4 rounded lg:h-8"
             >search</button>
           </div>
         </div>
       </form>
     </div>
 
-    <div class="panel">
+    <div class="panel overflow-x-auto">
       <content-widget :data="orders.data" placeholder="There are no orders to display...">
-        <table class="app-table table-auto w-full">
+        <table class="app-table table-auto lg:w-full">
           <thead>
             <tr>
               <th>User</th>

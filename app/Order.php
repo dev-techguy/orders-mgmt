@@ -22,6 +22,7 @@ class Order extends Model
     public function make($request)
     {
         $product = Product::find($request['product_id']);
+        $request['quantity'] = abs($request['quantity']);
 
         $request['price'] = $product->price;
         $request['currency'] = $product->currency;
@@ -40,6 +41,7 @@ class Order extends Model
 
     public function updateRecord($quantity)
     {
+        $quantity = abs($quantity);
         $total = $this->computeTotal($this->product, $quantity);
 
         return $this->update(['quantity' => $quantity, 'total' => $total]);
