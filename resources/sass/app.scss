@@ -31,8 +31,9 @@
 }
 
 .pagination .page-link {
-    @apply border bg-gray-600 mr-2 py-1 px-2 rounded text-white text-sm;
+    @apply border bg-gray-600 ml-2 py-1 px-2 rounded text-white text-sm;
 }
+
 
 .pagination .page-item.active .page-link {
     @apply bg-gray-700;
