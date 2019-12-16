@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Eloquent\OrderContract;
 use App\Order;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function index(Order $order, Request $request)
+    public function index(Request $request)
     {
-        $q = $request->get('q');
+        $order = app(OrderContract::class);
 
-        $results = $order->whereIn('product_id', function ($query) use ($q) {
-            return $query->select('id')->from('products')->where('name', 'LIKE', "%$q%");
-        })->orWhereIn('user_id', function ($query) use ($q) {
-            return $query->select('id')->from('users')->where('name', 'LIKE', "%$q%");
-        })->with('user:id,name', 'product:id,name')->orderBy('created_at', 'DESC')->paginate(5);
+        $results = $order->searchFor($request->get('q'))
+            ->withRelations('user:id,name', 'product:id,name')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5);
 
         return $this->successJson($results);
     }

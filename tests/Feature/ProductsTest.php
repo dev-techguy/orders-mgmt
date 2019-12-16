@@ -23,6 +23,7 @@ class ProductsTest extends TestCase
     /** @test */
     function can_fecth_all_products()
     {
+        $this->withoutExceptionHandling();
         $this->assertCount(0, Product::all());
         factory(Product::class, 5)->create();
         $response = $this->get(route('products.all'))->assertOk();

@@ -127,6 +127,7 @@ class OrdersTest extends TestCase
      */
     function orders_may_be_filtered_by_date_intervals($period, $ordersCount)
     {
+        $this->withoutExceptionHandling();
         factory(Order::class, 3)->create();
         factory(Order::class, 5)->create(['created_at' => now()->subDays(5)]);
 

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
+use App\Contracts\Eloquent\ProductContract;
 
 class ProductController extends Controller
 {
-    public function index(Product $product)
+    public function index(ProductContract $product)
     {
         $products = $product->limit(5)
-            ->select(['id', 'name', 'price', 'currency', 'discount'])
+            ->select('id', 'name', 'price', 'currency', 'discount')
             ->get();
 
         return $this->successJson($products);

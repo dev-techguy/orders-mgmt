@@ -2,53 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
-use App\Traits\Timestamp;
 use Illuminate\Http\Request;
+use App\Contracts\Eloquent\OrderContract;
 
 class OrderController extends Controller
 {
-    use Timestamp;
+    private $order;
+    private $request;
 
-    public function index(Order $order, Request $request)
+    public function __construct()
     {
-        $orders = $order->with('user:id,name', 'product:id,name');
-        $period = $request->get('period');
+        $this->order = app(OrderContract::class);
+        $this->request = app(Request::class);
+    }
 
-        if ($period && $period !== 'all') {
-            [$from, $to] = $this->getTimestamps($request);
-            $orders = $orders->whereBetween('created_at', [$from, $to]);
+    public function index()
+    {
+        $orders = $this->order->withRelations('user:id,name', 'product:id,name');
+        if ($this->request->has('period')) {
+            $orders = $orders->inPeriod($this->request->get('period'));
         }
-
         $orders = $orders->orderBy('created_at', 'DESC')
             ->paginate(config('product.pagination'));
 
         return $this->successJson($orders);
     }
 
-    public function store(Order $order, Request $request)
+    public function store()
     {
-        $this->validate($request, [
+        $this->validate($this->request, [
             'product_id' => 'required|exists:products,id',
             'user_id' => 'required|exists:users,id',
             'quantity' => 'required'
         ]);
 
-        $payload = $request->only(['user_id', 'product_id', 'quantity']);
-        $createdOrder = $order->make($payload);
+        $createdOrder = $this->order->make(
+            $this->request->only(['user_id', 'product_id', 'quantity'])
+        );
         return $this->successJson($createdOrder);
     }
 
-    public function update(Order $order, Request $request)
+    public function update($order)
     {
-        $order->updateRecord($request->get('quantity'));
-
+        $this->order->findById($order)
+            ->update($this->request->get('quantity'));
         return $this->successJson();
     }
 
-    public function destroy(Order $order)
+    public function destroy($order)
     {
-        $order->delete();
+        $this->order->findById($order)->delete();
         return $this->successJson();
     }
 }
