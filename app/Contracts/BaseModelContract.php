@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contracts\Eloquent;
+namespace App\Contracts;
 
-interface BaseContract
+interface BaseModelContract
 {
     public function limit(int $count);
     public function select(...$args);

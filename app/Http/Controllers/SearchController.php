@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Eloquent\OrderContract;
-use App\Order;
 use Illuminate\Http\Request;
+use App\Contracts\OrderContract;
 
 class SearchController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\User;
-use App\Contracts\Eloquent\UserContract;
+use App\Contracts\UserContract;
 
 class UserRepository extends BaseRepository implements UserContract
 {
