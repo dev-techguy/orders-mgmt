@@ -18,7 +18,11 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->order->withRelations('user:id,name', 'product:id,name');
+        $orders = $this->order->withRelations(
+            'user:id,name',
+            'product:id,name'
+        );
+
         if ($this->request->has('period')) {
             $orders = $orders->inPeriod($this->request->get('period'));
         }
