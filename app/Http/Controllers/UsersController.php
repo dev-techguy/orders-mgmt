@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Eloquent\UserContract;
+use App\Contracts\UserContract;
 
 class UsersController extends Controller
 {

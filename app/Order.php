@@ -41,7 +41,7 @@ class Order extends Model
 
     public function updateRecord($quantity)
     {
-        $quantity = abs($quantity);
+        $quantity = $quantity === null ? 1 : abs($quantity);
         $total = $this->computeTotal($this->product, $quantity);
 
         return $this->update(['quantity' => $quantity, 'total' => $total]);

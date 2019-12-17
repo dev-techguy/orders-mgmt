@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Contracts\Eloquent\OrderContract;
+use App\Contracts\OrderContract;
 use App\Order;
 use App\Traits\Timestamp;
 

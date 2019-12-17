@@ -13,6 +13,7 @@ class UsersTest extends TestCase
     /** @test */
     function can_fecth_all_users()
     {
+        $this->withoutExceptionHandling();
         $this->assertCount(0, User::all());
         factory(User::class, 2)->create();
         $response = $this->get(route('users.all'))->assertOk();

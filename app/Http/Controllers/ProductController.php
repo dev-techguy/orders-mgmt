@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Eloquent\ProductContract;
+use App\Contracts\ProductContract;
 
 class ProductController extends Controller
 {

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\UserContract;
+use App\Contracts\OrderContract;
+use App\Contracts\ProductContract;
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\Eloquent\UserContract;
-use App\Contracts\Eloquent\OrderContract;
-use App\Contracts\Eloquent\ProductContract;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Eloquent\OrderRepository;
 use App\Repositories\Eloquent\ProductRepository;
